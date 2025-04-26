@@ -50,6 +50,16 @@ docker image prune --all --force
 docker system prune --all --force
 ```
 
+## AWS commands
+
+```bash
+aws s3 mb s3://my-first-bucket --endpoint-url=http://localhost:4566
+
+awslocal s3 mb s3://my-second-bucket
+
+awslocal s3 ls
+```
+
 ## Links
 
 * [LocalStack Cloud](https://app.localstack.cloud/)
