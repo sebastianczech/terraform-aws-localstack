@@ -55,3 +55,22 @@ docker system prune --all --force
 * [LocalStack Cloud](https://app.localstack.cloud/)
 * [Docker Desktop](https://docs.docker.com/desktop/)
 * [Docker Compose](https://docs.docker.com/compose/)
+
+## Problems
+
+### Failed to connect to /var/run/com.docker.vmnetd.sock
+
+Error:
+
+```
+Error while starting LocalStack container: Docker process returned with errorcode 1
+Error response from daemon: Ports are not available: exposing port TCP 127.0.0.1:443 -> 127.0.0.1:0: failed to connect to /var/run/com.docker.vmnetd.sock: is vmnetd running?: dial unix /var/run/com.docker.vmnetd.sock: connect: no such file or directory
+```
+
+Issue: https://github.com/localstack/localstack/issues/10576
+
+Solution:
+
+```
+sudo /Applications/Docker.app/Contents/MacOS/install vmnetd
+```
