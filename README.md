@@ -2,10 +2,11 @@
 
 ## Usage
 
-Install CLI tool:
+Install CLI tools:
 
 ```bash
 brew install localstack/tap/localstack-cli
+pip install awscli-local
 ```
 
 Setup environment:
@@ -24,6 +25,18 @@ Start environment:
 localstack start
 ```
 
+Set auth token:
+
+```bash
+localstack auth set-token <your_auth_token>
+```
+
+Show configuration:
+
+```bash
+localstack config show
+```
+
 Stop environment:
 
 ```bash
@@ -35,7 +48,6 @@ Clean environment:
 ```bash
 docker image prune --all --force
 docker system prune --all --force
-rm -fr volume
 ```
 
 ## Links
