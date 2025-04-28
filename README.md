@@ -99,11 +99,9 @@ aws --endpoint-url=http://localhost:4566 s3 mb s3://demo-bucket-cli
 aws --endpoint-url=http://localhost:4566 s3api put-bucket-acl --bucket demo-bucket-cli --acl public-read
 
 aws --endpoint-url=http://localhost:4566 s3 ls
-aws --endpoint-url=http://localhost:4566 s3 ls s3://demo-bucket-cli
 
-aws --endpoint-url=http://localhost:4566 s3 ls s3://demo-bucket-py
-aws --endpoint-url=http://localhost:4566 s3 cp s3://demo-bucket-py/simple_file_with_binary_data.txt .
-aws --endpoint-url=http://localhost:4566 s3 cp simple_file_with_binary_data.txt s3://demo-buck
+aws --endpoint-url=http://localhost:4566 s3 cp .gitignore s3://demo-bucket-cli
+aws --endpoint-url=http://localhost:4566 s3 ls s3://demo-bucket-cli
 ```
 
 ### SNS
@@ -111,49 +109,53 @@ aws --endpoint-url=http://localhost:4566 s3 cp simple_file_with_binary_data.txt 
 ```bash
 aws --endpoint-url=http://localhost:4566 sns list-topics
 aws --endpoint-url=http://localhost:4566 sns create-topic --name demo-sns-cli
-aws --endpoint-url=http://localhost:4566 sns publish --topic-arn arn:aws:sns:us-east-1:000000000000:demo-sns-cli --message "Test message sent to SNS on Localstack"
-
-aws --endpoint-url=http://localhost:4566 sns subscribe \
-              --topic-arn arn:aws:sns:us-east-1:000000000000:demo-sns-cli \
-              --protocol sqs \
-              --notification-endpoint http://localhost:4566/000000000000/demo-sqs-cli
-
-aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url http://localhost:4566/000000000000/demo-sqs-cli
 ```
 
 ### SQS
 
 ```bash
 aws --endpoint-url=http://localhost:4566 sqs list-queues
-aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name demo-sqs-cli 
+aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name demo-sqs-cli
+```
+
+### SNS & SQS
+
+```bash
+aws --endpoint-url=http://localhost:4566 sqs get-queue-attributes \
+    --queue-url http://localhost:4566/000000000000/demo-sqs-cli \
+    --attribute-names QueueArn
+
+aws --endpoint-url=http://localhost:4566 sns subscribe \
+              --topic-arn arn:aws:sns:us-east-1:000000000000:demo-sns-cli \
+              --protocol sqs \
+              --notification-endpoint arn:aws:sqs:us-east-1:000000000000:demo-sqs-cli
+
+aws --endpoint-url=http://localhost:4566 sns publish --topic-arn arn:aws:sns:us-east-1:000000000000:demo-sns-cli --message "Test message sent to SNS on Localstack"
+
+aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url http://localhost:4566/000000000000/demo-sqs-cli
 ```
 
 ### Lambda
 
 ```bash
-aws --endpoint-url http://localhost:4566 lambda list-functions
-
-cd app/src
-zip lambda_hello_world.zip lambda_hello_world.py
+cd lambda/hello-world
+zip lambda-hello-world.zip app.py
 
 aws --endpoint-url=http://localhost:4566 lambda create-function \
     --function-name lambda_hello_world_cli \
-    --zip-file fileb://lambda_hello_world.zip \
+    --zip-file fileb://lambda-hello-world.zip \
+    --handler app.lambda_handler \
+    --runtime python3.9 \
     --role arn:aws:iam::123456789012:role/service-role/MyTestFunction-role-tges6bf
 
 aws --endpoint-url=http://localhost:4566 lambda list-functions
 
 aws --endpoint-url=http://localhost:4566 lambda get-function --function-name lambda_hello_world_cli
 
-curl http://localhost:4566/2015-03-31/functions/lambda_hello_world_cli/code --output lambda_hello_world.zip
-unzip lambda_hello_world.zip
-cat lambda_hello_world.py
-
 aws --endpoint-url=http://localhost:4566 lambda invoke \
     --function-name lambda_hello_world_cli \
     --cli-binary-format raw-in-base64-out \
-    --payload file://lambda_hello_world_input.json \
-    lambda_hello_world_output.json
+    output.json
 ```
 
 ## Links
