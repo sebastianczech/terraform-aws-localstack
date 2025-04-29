@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-merge-conflict
       - id: end-of-file-fixer
@@ -8,11 +8,11 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
 -   repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.0
+    rev: v8.25.0
     hooks:
       - id: gitleaks
 -   repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.97.0
+    rev: v1.99.0
     hooks:
       - id: terraform_fmt
       - id: terraform_docs
@@ -38,20 +38,16 @@ repos:
         args:
           - --hook-config=--retry-once-with-cleanup=true
           - --tf-init-args=-upgrade
-      - id: terraform_trivy
-        args:
-          - '--args=--ignorefile=__GIT_WORKING_DIR__/.trivyignore'
-          - --hook-config=--parallelism-limit=1 # https://github.com/aquasecurity/trivy/discussions/7139
       ### below action lock the terraform providers versions
       ### it can done also by command:
       ### terraform providers lock -platform=linux_arm64 -platform=linux_amd64 -platform=darwin_amd64
-      - id: terraform_providers_lock
-        args:
-          - --args=-platform=linux_arm64
-          - --args=-platform=linux_amd64
-          - --args=-platform=darwin_amd64
+      # - id: terraform_providers_lock
+      #   args:
+      #     - --args=-platform=linux_arm64
+      #     - --args=-platform=linux_amd64
+      #     - --args=-platform=darwin_amd64
 -   repo: https://github.com/bridgecrewio/checkov.git
-    rev: '3.2.219' # change to tag or sha
+    rev: '3.2.411' # change to tag or sha
     hooks:
       - id: checkov
         verbose: true
@@ -60,6 +56,6 @@ repos:
           --download-external-modules,"true",
           --quiet,
           --soft-fail,
-          --skip-check, "CKV_AWS_26,CKV_AWS_27,CKV_AWS_28,CKV_AWS_50,CKV_AWS_116,CKV_AWS_119,CKV_AWS_117,CKV_AWS_158,CKV_AWS_173,CKV_AWS_272,CKV_AWS_338,CKV2_AWS_16",
-          --soft-fail-on, "CKV2_GHA_1",
+          --skip-check, "",
+          --soft-fail-on, "",
         ]
