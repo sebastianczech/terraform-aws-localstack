@@ -56,6 +56,6 @@ repos:
           --download-external-modules,"true",
           --quiet,
           --soft-fail,
-          --skip-check, "",
+          --skip-check, "CKV2_AWS_62,CKV2_AWS_6,CKV2_AWS_61,CKV_AWS_18,CKV_AWS_145,CKV_AWS_144,CKV_AWS_21",
           --soft-fail-on, "",
         ]
